@@ -18,7 +18,7 @@ class playlistGatherer(spotifyLogin):
         self._trackname_artist_arr=[]
 
         self._playlistname=''
-
+        self._playlistowner=None
 
     def getPlaylistIDs(self):
         return self._playlistids
@@ -33,7 +33,7 @@ class playlistGatherer(spotifyLogin):
         return self._trackuris
 
     def getTrackNames(self):
-        return self._tracknames
+        return self._trackname_artist_arr
 
     def getNewPlaylist(self):
         return self._newplaylist
@@ -45,7 +45,7 @@ class playlistGatherer(spotifyLogin):
         trackcounter=0
         done=False
         while not done:
-            newplaylists=self._sp.current_user_playlists(50, offset=50*trackcounter)
+            newplaylists=self._sp.user_playlists(self._playlistowner, 50, offset=50*trackcounter)
             idlist=[iPlaylist['id'] for iPlaylist in newplaylists['items']]
             if(len(idlist)==0):
                 done=True
@@ -92,16 +92,6 @@ class playlistGatherer(spotifyLogin):
                         self._trackname_artist_arr.append(trackname+"_"+trackartist)
 
         print(f"Found {len(self._trackuris)} songs")
-    
-    def makeTrackNameList(self):
-        print("GETTING TRACK NAMES")
-        if(len(self._trackuris)==0):
-            print("No tracks loaded in yet")
-            return 0
-
-        for iTrack in tqdm(self._trackuris):
-            track=self._sp.track(iTrack)
-            self._tracknames.append(track['name'])
 
 
     def makeMegaPlaylist(self, newplaylistname):
@@ -121,7 +111,9 @@ class playlistGatherer(spotifyLogin):
         print("Made new playlist!")
             
 
-    def __call__(self, newplaylistname: str='all my songs'):
+    def __call__(self, playlistowner=None, newplaylistname: str='all my songs'):
+        if playlistowner is None:
+            self._playlistowner=self._username
         self._gatherUserPlaylistIDs()
         self.gatherUserSongs()
         self.makeMegaPlaylist(newplaylistname)
