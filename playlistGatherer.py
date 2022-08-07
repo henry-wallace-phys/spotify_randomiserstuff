@@ -15,7 +15,7 @@ class playlistGatherer(spotifyLogin):
 
         self._tracklist=[]
         self._trackuris=[]
-        self._trackname_artist_arr=[]
+        self._track_artist_name_dict={}
 
         self._playlistname=''
         self._playlistowner=None
@@ -33,7 +33,7 @@ class playlistGatherer(spotifyLogin):
         return self._trackuris
 
     def getTrackNames(self):
-        return self._trackname_artist_arr
+        return self._track_artist_name_dict
 
     def getNewPlaylist(self):
         return self._newplaylist
@@ -45,7 +45,10 @@ class playlistGatherer(spotifyLogin):
         trackcounter=0
         done=False
         while not done:
-            newplaylists=self._sp.user_playlists(self._playlistowner, 50, offset=50*trackcounter)
+            if(self._username==self._playlistowner):
+                    newplaylists=self._sp.current_user_playlists(50, offset=50*trackcounter)
+            else:
+                newplaylists=self._sp.user_playlists(self._playlistowner, 50, offset=50*trackcounter)
             idlist=[iPlaylist['id'] for iPlaylist in newplaylists['items']]
             if(len(idlist)==0):
                 done=True
@@ -84,15 +87,16 @@ class playlistGatherer(spotifyLogin):
             for iTrack in iTrackArr:
                 trackname=iTrack['name']
                 trackartist=iTrack['artists'][0]['name']
-                print(trackartist)
                 trackuri=iTrack['uri']
                 if trackuri not in self._trackuris and 'spotify:track' in str(trackuri):
-                    if trackname+"_"+trackartist not in self._trackname_artist_arr:
+                    if trackartist not in self._track_artist_name_dict:
                         self._trackuris.append(trackuri)
-                        self._trackname_artist_arr.append(trackname+"_"+trackartist)
+                        self._track_artist_name_dict[trackartist] = [trackname]
+                    elif trackname not in self._track_artist_name_dict[trackartist]:
+                        self._trackuris.append(trackuri)
+                        self._track_artist_name_dict[trackartist].append(trackname)
 
-        print(f"Found {len(self._trackuris)} songs")
-
+        print(f"Found {len(self._trackuris)} songs from {len(self._track_artist_name_dict.keys())} artists")
 
     def makeMegaPlaylist(self, newplaylistname):
         print(f"Making mega playlist called {newplaylistname}!")
@@ -129,7 +133,6 @@ if __name__=='__main__':
 
     p=playlistGatherer(username)
     p()
-
     # p.makePlaylistNameList()
     # p.makeTrackNameList()
 
