@@ -1,6 +1,10 @@
 import sys
 import random
 
+'''
+Code to control playlists
+'''
+
 from spotipyLogin import spotifyLogin
 
 class controlTools(spotifyLogin):

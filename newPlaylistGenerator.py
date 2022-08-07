@@ -6,6 +6,10 @@ from tqdm import tqdm
 
 from spotipyLogin import spotifyLogin
 
+'''
+Generates a playlist of random songs
+'''
+
 class newPlaylistGenerator(spotifyLogin):
     #Class to find random songs on spotify, sleep statements necessary for API to work!
     def __init__(self, username, verbose=False):

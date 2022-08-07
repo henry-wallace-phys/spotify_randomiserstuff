@@ -3,7 +3,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import spotipy.util as util
 
 '''
-Code to login
+Code to login to spotify
 '''
 
 class spotifyLogin:
