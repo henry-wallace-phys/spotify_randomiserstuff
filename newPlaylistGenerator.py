@@ -7,7 +7,7 @@ from tqdm import tqdm
 from spotipyLogin import spotifyLogin
 
 '''
-Generates a playlist of random songs
+Tools to make new playlists from non-user generated stuff
 '''
 
 class newPlaylistGenerator(spotifyLogin):

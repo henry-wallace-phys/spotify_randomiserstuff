@@ -46,7 +46,7 @@ class playlistGatherer(spotifyLogin):
         done=False
         while not done:
             if(self._username==self._playlistowner):
-                    newplaylists=self._sp.current_user_playlists(50, offset=50*trackcounter)
+                newplaylists=self._sp.current_user_playlists(50, offset=50*trackcounter)
             else:
                 newplaylists=self._sp.user_playlists(self._playlistowner, 50, offset=50*trackcounter)
             idlist=[iPlaylist['id'] for iPlaylist in newplaylists['items']]
@@ -113,12 +113,43 @@ class playlistGatherer(spotifyLogin):
                 print(iTrackList)
                 sys.exit(-1)
         print("Made new playlist!")
-            
 
-    def __call__(self, playlistowner=None, newplaylistname: str='all my songs'):
+
+    def badMusicRemover(self, artistnames=[]):
+        print(f"Removing {artistnames} from your playlists")
+        badmusiccounter=0
+
+        if len(artistnames)==0:
+            return 0
+
+        for iPlaylist in tqdm(self._playlistids):
+            playlist=self._sp.playlist(iPlaylist)
+            if playlist['owner']['id'] == self._username:
+                tracklist=[iTrack['track'] for iTrack in playlist['tracks']['items']]
+                for iTrack in tracklist:
+                    if 'spotify:track' in iTrack['uri']:
+                        trackartists=[iArtist['name'] for iArtist in iTrack['artists']]
+                        if len(set.intersection(set(trackartists), set(artistnames)))>0:
+                            badmusiccounter+=1
+                            try:
+                                self._sp.user_playlist_remove_all_occurrences_of_tracks(self._username, iPlaylist, [iTrack['uri']])
+                            except:
+                                print("Tried to remove badly formatted track")
+
+        print(f"Removed {badmusiccounter} songs")
+
+
+    def __call__(self, playlistowner=None, newplaylistname: str='all my songs', badartists=['Tones and I', 'Ed Sheeran', 'AJR', 'Epic Rap Battles of History']):
+        self._playlistowner=playlistowner
         if playlistowner is None:
             self._playlistowner=self._username
+        else:
+            print(f"FINDING PLAYLIST FOR {playlistowner}")
+        
         self._gatherUserPlaylistIDs()
+        if self._playlistowner==self._username:
+            self.badMusicRemover(badartists)
+
         self.gatherUserSongs()
         self.makeMegaPlaylist(newplaylistname)
 
@@ -132,8 +163,4 @@ if __name__=='__main__':
         sys.exit()
 
     p=playlistGatherer(username)
-    p()
-    # p.makePlaylistNameList()
-    # p.makeTrackNameList()
-
-    
+    p(newplaylistname='owens music', playlistowner='serratedmonkey')    

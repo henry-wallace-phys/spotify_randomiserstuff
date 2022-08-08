@@ -1,13 +1,13 @@
 import sys
 import random
+from spotipyLogin import spotifyLogin
 
 '''
 Code to control playlists
 '''
 
-from spotipyLogin import spotifyLogin
 
-class controlTools(spotifyLogin):
+class playlistShuffler(spotifyLogin):
     '''
     Set of tools for controlling spotify playlist
     '''
@@ -72,3 +72,14 @@ class controlTools(spotifyLogin):
         
         if(self._verbose):
             print("Skip to next track for proper randomisation! Done")
+
+
+if __name__=="__main__":
+    if len(sys.argv) > 1:
+        username = sys.argv[1]
+    else:
+        print("Usage: %s username" % (sys.argv[0],))
+        sys.exit()
+
+    PLAYLISTNAME="Pull Request Merge Coffee"
+    s=playlistShuffler(username, PLAYLISTNAME, verbose=True)
