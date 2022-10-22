@@ -4,7 +4,7 @@ import numpy as np
 import time
 from tqdm import tqdm
 
-from spotipyLogin import spotifyLogin
+from BackEndBaseClasses .spotipyLogin import spotifyLogin
 
 '''
 Tools to make new playlists from non-user generated stuff
@@ -24,6 +24,7 @@ class newPlaylistGenerator(spotifyLogin):
 
     def searchRandomWord(self):
         #Searches spotify with song with the title of a random word
+        #out of scope of this really, should make a generic utils class...
         r=RandomWords()
         randomword=r.get_random_word()
         if self._verbose:
@@ -31,14 +32,14 @@ class newPlaylistGenerator(spotifyLogin):
         if randomword==None:
             if self._verbose:
                 print("Random word is None, skipping")
-            return 0
+            return None
         try:
             randomsongdict=self._sp.search(q=randomword, type="track", limit=1)
         except:
             if(self._verbose):
                 print(f"For some reason spotify can't find {randomword}, sleeping")
             time.sleep(5)
-            return 0
+            return None
         try:
             randomsong=randomsongdict['tracks']['items'][0]
             if self._verbose:
@@ -48,19 +49,17 @@ class newPlaylistGenerator(spotifyLogin):
             if self._verbose:
                 print(f"Couldn't find song called {randomword}")
             time.sleep(3)
-            return 0
+            return None
 
     def constructPlaylistArray(self, playlistlength=30):
         startpoint=0
         startpoint+=len(self._playlist)
         self._playlist=np.append(self._playlist, np.empty(playlistlength, str))
         for i in tqdm(range(startpoint, playlistlength)):
-            addplay=False
-            while addplay==False:
+            trackid=None
+            while trackid==None:
                 trackid=self.searchRandomWord()
-                if trackid!=0:
-                    self._playlist[i]=trackid
-                    addplay=True
+            self._playlist[i]=trackid
         if self._verbose:
             print("You've made a playlist, yaaay!")
     
