@@ -1,4 +1,7 @@
 Python code to play with spotify:
+    
+    To run simply do python3 main.py (jupyter doesn't like this code for some reason!)
+    
     - BackEndClasses ; Contains basic information for searching + loging into spotify
 
     - Basic Utils ;
@@ -9,5 +12,4 @@ Python code to play with spotify:
     - Henrydle ;
         Personal implentation of heardle
         - henrydle_base : Base class, contains information for guessing and generating 
-        - henrydle_gui :
-            TKinter ui for playing with henrydle (incomplete)
+        - henrydle_gui : Basic UI stuff for Henrydle
