@@ -14,6 +14,7 @@ class henrydle_base(newPlaylistGenerator):
     # Can either pick anything or just from your own songs
     def __init__(self, username: str, pick_fromuserplaylist: bool=True) -> None:
         super().__init__(username) #Login
+        print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
         print("Welcome to Henrydle")
 
         self._useusersongs = pick_fromuserplaylist
@@ -39,6 +40,10 @@ class henrydle_base(newPlaylistGenerator):
         self._randomtrack_artistnames = [iArtist['name'] for iArtist in randomtrack['artists']]
     
         self._artisttracks = self.getArtistTrackList()
+        self._artistnames = ""
+
+        for iArtist in self._randomtrack_artistnames:
+            self._artistnames+=f"{iArtist} "
 
     def getTrackName(self) -> str :
         return self._randomtrack_name
@@ -68,15 +73,22 @@ class henrydle_base(newPlaylistGenerator):
         return alltrack_arr
 
     def guessTrack(self, songname: str)->str:
-        if songname.upper() == self._randomtrack_name.upper():
+        songname=songname.upper()
+        if len(songname)==0: #Just skip it if they don't enter anything!
+            return answerStruct.incorrect
+        elif songname == self._randomtrack_name.upper():
             #Done!
             return answerStruct.correctsong
-        elif songname.upper() in self._randomtrack_name.upper():
-            print("Almost got it, but not quite!")
-            return answerStruct.correctartist
+        elif songname in self._randomtrack_name.upper():
+            if songname in self._artisttracks: #Means all the remixes etc. don't matter!
+                print("Not this version, but you've got it!")
+                return answerStruct.correctartist
+            else:
+                print("Almost got it, but not quite!")
+                return answerStruct.correctartist
 
         #Now we check to see if the artist is the same
-        elif songname.upper() in self._artisttracks:
+        elif songname in self._artisttracks:
             return answerStruct.correctartist
         else:
             return answerStruct.incorrect
