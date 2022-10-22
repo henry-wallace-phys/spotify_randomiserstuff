@@ -1,6 +1,9 @@
 Python code to play with spotify:
     
-    To run simply do python3 main.py (jupyter doesn't like this code for some reason!)
+    To run simply do:
+          $ python3 main.py
+   
+     (jupyter doesn't like this code for some reason!)
     
     - BackEndClasses ; Contains basic information for searching + loging into spotify
 
