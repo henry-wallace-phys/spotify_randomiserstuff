@@ -1,6 +1,6 @@
 import sys
 import random
-from BackEndBaseClasses.spotipyLogin import spotifyLogin
+from baseClasses.spotipyLogin import spotifyLogin
 
 '''
 Code to control playlists

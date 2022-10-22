@@ -1,4 +1,4 @@
-from BackEndBaseClasses.spotipyLogin import spotifyLogin
+from baseClasses.spotipyLogin import spotifyLogin
 from tqdm import tqdm
 import sys
 

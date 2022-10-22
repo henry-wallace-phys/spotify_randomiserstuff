@@ -1,4 +1,4 @@
-from BasicUtils.playlistGatherer import playlistGatherer
+from utils.playlistGatherer import playlistGatherer
 import matplotlib.pyplot as plt
 import sys
 from tqdm import tqdm
