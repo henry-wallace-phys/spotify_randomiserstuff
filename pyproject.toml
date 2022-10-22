@@ -1,6 +1,6 @@
 [project]
 name="henryspotify"
-version="0.1.0"
+version="1.0.0"
 authors=[
     { name="Henry Israel", email="henryisrael08@gmail.com" },
 ]
