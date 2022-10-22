@@ -1,6 +1,6 @@
 from time import sleep
-from BackEndBaseClasses import newPlaylistGenerator
-from BasicUtils import playlistGatherer
+from baseClasses import newPlaylistGenerator
+from utils import playlistGatherer
 import random 
 
 class answerStruct:
