@@ -4,7 +4,7 @@ import numpy as np
 import time
 from tqdm import tqdm
 
-from BackEndBaseClasses.spotipyLogin import spotifyLogin
+from BackEndBaseClasses .spotipyLogin import spotifyLogin
 
 '''
 Tools to make new playlists from non-user generated stuff

@@ -1,5 +1,6 @@
-from henrydle import henrydle_base
+from henrydle import henrydle_gui
+#Useful script, mostly for testing, will run Henrydle!
 
 if __name__=="__main__":
-    henrydle = henrydle_base("dramallamaduck2")
-    print(henrydle.getTrackName())
+    henrydle = henrydle_gui("dramallamaduck2")
+    henrydle()
